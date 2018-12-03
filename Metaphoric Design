@@ -1,0 +1,14 @@
+User Story:
+
+1) User Logs In, Either by providing a desired screen name, or when implemented by using the kenyon shibboleth server.
+2) User Spawns in the default zone, probably the classroom where we have Software Development
+3) User can now move around, type messages, etc.
+4) When done, user closes the browser to quit.
+
+User Requirements:
+
+1) Be able to send and veiw public messages
+2) Be able to move around within each zone
+3) Be able to interact with interactable objects within the world
+4) Game plays smoothly
+5) Be playable from multiple browsers (but screw Internet Explorer)
