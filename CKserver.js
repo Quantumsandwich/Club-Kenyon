@@ -84,6 +84,7 @@ io.sockets.on('connection', function(socket) {
 
 	query = "SELECT * FROM clubKenyon WHERE changed=1";
 	console.log("query is: "+query);
+	sendQueryResults(query, socket);
 
   });
 });
