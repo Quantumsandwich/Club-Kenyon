@@ -22,7 +22,7 @@ con.connect(function(err) {
 var server = http.createServer(function(req, res) {
   var url = req.url;
   // If no path, get the index.html
-  if (url == "/") url = "/clubKenyon.html";
+  if (url == "/") url = "/Project5Prototype.html";
   // get the file extension (needed for Content-Type)
   var ext = url.split('.').pop();
   console.log(url + "  :  " + ext);
