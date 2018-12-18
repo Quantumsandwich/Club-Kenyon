@@ -81,8 +81,8 @@ io.sockets.on('connection', function(socket) {
      // console.log("query is: "+query);
 
      */
-
-	query = "SELECT * FROM clubKenyon WHERE changed=1";
+	
+	query = "SELECT * FROM clubKenyon WHERE changed=0";
 	console.log("query is: "+query);
 	sendQueryResults(query, socket);
 
