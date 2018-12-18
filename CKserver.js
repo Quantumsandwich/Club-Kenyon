@@ -52,8 +52,20 @@ var server = http.createServer(function(req, res) {
 // Set up socket.io communication
 var io = require('socket.io').listen(server);
 
+
+
 // When a client connects, we note it in the console
 io.sockets.on('connection', function(socket) {
+
+
+    function daLoop(){
+    query = "SELECT * FROM clubKenyon WHERE changed=0";
+    console.log("looped query is working");
+    sendQueryResults(query, socket);
+    }
+
+    setInterval(daLoop,1000);
+    
   // watch for message from client (JSON)
     socket.on('message', function(message) {
 
@@ -81,10 +93,15 @@ io.sockets.on('connection', function(socket) {
      // console.log("query is: "+query);
 
      */
+	if (message.operation == keypress){
 	
-	query = "SELECT * FROM clubKenyon WHERE changed=0";
-	console.log("query is: "+query);
-	sendQueryResults(query, socket);
+	//query = "SELECT * FROM clubKenyon WHERE changed=0";
+	//console.log("query is: "+query);
+	//sendQueryResults(query, socket);
+
+	    console.log("userID is: "+message.userID+" and button pressed is: "+message.button);
+
+	}
 
   });
 });
@@ -98,7 +115,7 @@ function sendQueryResults(query,socket) {
 		Object.keys(result).forEach(function(key) {
 			var row = result[key];
 			results.push(row);
-			//console.log(row.First+" "+row.Last+", Phone:"+row.Phone+"  ["+row.Type+"]");	    	
+			console.log(row.ID+" "+row.sprite+" "+row.posX+" "+row.posY+" ");	    	
 		});
 		socket.emit('message', {
     		operation: 'rows',
