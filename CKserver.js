@@ -93,7 +93,7 @@ io.sockets.on('connection', function(socket) {
      // console.log("query is: "+query);
 
      */
-	if (message.operation == keypress){
+	if (message.operation == 'keypress'){
 	
 	//query = "SELECT * FROM clubKenyon WHERE changed=0";
 	//console.log("query is: "+query);

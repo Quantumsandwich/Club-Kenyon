@@ -21,10 +21,7 @@ var userID = 1;
 // Set up events when page is ready
 $(document).ready(function () {
 
-    if(rightPressed){
-	sendKeypress();
-	console.log("right button pressed");
-    }
+    setInterval(sendPushed,100);
     
     // this is an event handler for a message on socket.io from the server side.
     // For this program is will be a reponse to a request from this page for an action
@@ -87,9 +84,52 @@ $(document).ready(function () {
     
 });
 
-$(document).addEventListener("keydown",keyDownHandler,false);
-$(document).addEventListener("keyup",keyUpHandler,false);
+$(document).keydown(function(e) {
+    keyDownHandler(e);
+    e.preventDefault();
+    console.log("keydown");
+});
+$(document).keyup(function(e) {
+    keyUpHandler(e);
+    e.preventDefault();
+    console.log("keyup");
+});
 
+
+function sendPushed(){
+
+    if(leftPressed){
+	socket.emit('message', {
+	    operation: "keypress",
+	    userID: userID,
+	    button: "left"
+	});
+    }
+    if(rightPressed){
+	socket.emit('message', {
+	    operation: "keypress",
+	    userID: userID,
+	    button: "right"
+	});
+    }
+    if(upPressed){
+	socket.emit('message', {
+	    operation: "keypress",
+	    userID: userID,
+	    button: "up"
+	});
+    }
+    if(downPressed){
+	socket.emit('message', {
+	    operation: "keypress",
+	    userID: userID,
+	    button: "down"
+	});}
+    
+    
+   
+    
+}
     
     function keyDownHandler(e){
 	if(e.keyCode == 39){
