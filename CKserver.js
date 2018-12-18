@@ -25,7 +25,7 @@ var server = http.createServer(function(req, res) {
   if (url == "/") url = "/Project5Prototype.html";
   // get the file extension (needed for Content-Type)
   var ext = url.split('.').pop();
-  console.log(url + "  :  " + ext);
+  //console.log(url + "  :  " + ext);
   // convert file type to correct Content-Type
   var mimeType = 'text/html'; // default
   switch (ext) {
@@ -65,6 +65,9 @@ io.sockets.on('connection', function(socket) {
     }
 
     setInterval(daLoop,1000);
+
+//this variable will be used to pull things out of a function
+var output;
     
   // watch for message from client (JSON)
     socket.on('message', function(message) {
@@ -99,6 +102,20 @@ io.sockets.on('connection', function(socket) {
 	//console.log("query is: "+query);
 	//sendQueryResults(query, socket);
 
+	    query = "SELECT posX, posY FROM clubKenyon WHERE ID='"+message.userID+"'";
+
+	    con.query(query, function (err, result, fields) {
+		if (err) throw err;
+		var results = [];
+		Object.keys(result).forEach(function(key) {
+		    var row = result[key];
+		    results.push(row);
+		});
+		output = results;
+	    });
+
+	    console.log(output);
+	    
 	    console.log("userID is: "+message.userID+" and button pressed is: "+message.button);
 
 	}
