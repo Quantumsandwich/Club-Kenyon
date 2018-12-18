@@ -23,6 +23,7 @@ $(document).ready(function () {
 
     if(rightPressed){
 	sendKeypress();
+	console.log("right button pressed");
     }
     
     // this is an event handler for a message on socket.io from the server side.
@@ -60,9 +61,36 @@ $(document).ready(function () {
     });
 
 
-    document.addEventListener("keydown",keyDownHandler,false);
-    document.addEventListener("keyup",keyUpHandler,false);
+    
+    
+    operation = "Author"; // Default operation
 
+    // Clear everything on startup
+    $('.editdata').hide();
+    $("#search-btn").click(getMatches);  // Search button click
+    // do a search on every keystroke.
+    /*$("#search").keyup(function(e){
+	getMatches();
+    });    */
+    $("#add-btn").click(addEntry);    
+    $("#clear").click(clearResults);
+
+    //Handle pulldown menu
+    $(".dropdown-menu li a").click(function(){
+	$(this).parents(".btn-group").find('.selection').text($(this).text());
+	operation=$(this).text().split(" ").pop();  // Get last word (Last, First, Type, New)
+	//console.log("pick!"+operation);
+	changeOperation(operation);
+    });
+
+
+    
+});
+
+$(document).addEventListener("keydown",keyDownHandler,false);
+$(document).addEventListener("keyup",keyUpHandler,false);
+
+    
     function keyDownHandler(e){
 	if(e.keyCode == 39){
 	    rightPressed = true;
@@ -93,31 +121,7 @@ $(document).ready(function () {
 	}
     }
 
-    
-    
-    operation = "Author"; // Default operation
 
-    // Clear everything on startup
-    $('.editdata').hide();
-    $("#search-btn").click(getMatches);  // Search button click
-    // do a search on every keystroke.
-    /*$("#search").keyup(function(e){
-	getMatches();
-    });    */
-    $("#add-btn").click(addEntry);    
-    $("#clear").click(clearResults);
-
-    //Handle pulldown menu
-    $(".dropdown-menu li a").click(function(){
-	$(this).parents(".btn-group").find('.selection').text($(this).text());
-	operation=$(this).text().split(" ").pop();  // Get last word (Last, First, Type, New)
-	//console.log("pick!"+operation);
-	changeOperation(operation);
-    });
-
-
-    
-});
 
 // This processes the results from the server after we have sent it a lookup request.
 // This clears any previous work, and then calls buildTable to create a nice
