@@ -1,2 +1,11 @@
 
 tr:hover {background-color: #00FF7F}
+
+#canvas-container {
+    width: 100%;
+    text-align: center;
+}
+
+canvas{
+    display: inline;
+}

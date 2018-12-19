@@ -3,6 +3,23 @@ var http = require('http');
 var fs = require('fs');
 
 
+
+//Some gameplay related variables
+var deltaX = 5;
+var deltaY = 5;
+
+var canvasHeight = 563;
+var canvasWidth = 1000;
+
+var charHalfWidth = 5;
+var charHalfHeight = 10;
+var leftEdge = 0 + charHalfWidth;
+var rightEdge = canvasWidth - charHalfWidth;
+var topEdge = 0 + charHalfHeight;
+var bottomEdge = canvasHeight - charHalfHeight;
+
+
+
 //Everyone must use own port > 8000
 // Must Match client side port setting
 var port = 9669; //Ben changed the port to 9669 for CK server
@@ -25,7 +42,7 @@ var server = http.createServer(function(req, res) {
   if (url == "/") url = "/Project5Prototype.html";
   // get the file extension (needed for Content-Type)
   var ext = url.split('.').pop();
-  console.log(url + "  :  " + ext);
+  //console.log(url + "  :  " + ext);
   // convert file type to correct Content-Type
   var mimeType = 'text/html'; // default
   switch (ext) {
@@ -52,8 +69,23 @@ var server = http.createServer(function(req, res) {
 // Set up socket.io communication
 var io = require('socket.io').listen(server);
 
+
+
 // When a client connects, we note it in the console
 io.sockets.on('connection', function(socket) {
+
+
+    function daLoop(){
+    query = "SELECT * FROM clubKenyon WHERE changed=0";
+    console.log("looped query is working");
+    sendQueryResults(query, socket);
+    }
+
+    setInterval(daLoop,1000);
+
+//this variable will be used to pull things out of a function
+var output;
+    
   // watch for message from client (JSON)
     socket.on('message', function(message) {
 
@@ -81,10 +113,107 @@ io.sockets.on('connection', function(socket) {
      // console.log("query is: "+query);
 
      */
+	if (message.operation == 'keypress'){
 	
-	query = "SELECT * FROM clubKenyon WHERE changed=0";
-	console.log("query is: "+query);
-	sendQueryResults(query, socket);
+	//query = "SELECT * FROM clubKenyon WHERE changed=0";
+	//console.log("query is: "+query);
+	//sendQueryResults(query, socket);
+
+	    query = "SELECT posX, posY FROM clubKenyon WHERE ID='"+message.userID+"'";
+
+	    con.query(query, function (err, result, fields) {
+		if (err) throw err;
+		var results = [];
+		Object.keys(result).forEach(function(key) {
+		    var row = result[key];
+		    results.push(row);
+		});
+		console.log(results);
+		console.log("posX: "+results[0].posX);
+
+		if (message.button == 'left'){
+		    var potentialX =  results[0].posX * 1 - deltaX;
+		    if (potentialX < leftEdge){
+			io.to(socket.id).emit('message', {
+			    userID: message.user.ID,
+			    result: 'failure'
+			});
+		    }
+		    else {
+			query = "UPDATE clubKenyon SET posX = '"+potentialX+"' WHERE ID='"+message.userID+"'";
+			con.query(query, function (err, result, fields) {
+			    if (err) throw err;
+			    console.log("new x is: "+potentialX);
+			});
+		    }
+				  
+		}
+		else if (message.button == 'right'){
+		    var potentialX =  results[0].posX * 1 + deltaX;
+		    if (potentialX > rightEdge){
+			io.to(socket.id).emit('message', {
+			    userID: message.user.ID,
+			    result: 'failure'
+			});
+		    }
+		    else {
+			query = "UPDATE clubKenyon SET posX = '"+potentialX+"' WHERE ID='"+message.userID+"'";
+			con.query(query, function (err, result, fields) {
+			    if (err) throw err;
+			    console.log("new x is: "+potentialX);
+			});
+		    }
+				  
+		}
+		else if (message.button == 'up'){
+		    var potentialY =  results[0].posY * 1 - deltaY;
+		    if (potentialY < topEdge){
+			io.to(socket.id).emit('message', {
+			    userID: message.user.ID,
+			    result: 'failure'
+			});
+		    }
+		    else {
+			query = "UPDATE clubKenyon SET posY = '"+potentialY+"' WHERE ID='"+message.userID+"'";
+			con.query(query, function (err, result, fields) {
+			    if (err) throw err;
+			    console.log("new y is: "+potentialY);
+			});
+		    }
+				  
+		}
+		else if (message.button == 'down'){
+		    var potentialY =  results[0].posY * 1 + deltaY;
+		    if (potentialY > bottomEdge){
+			io.to(socket.id).emit('message', {
+			    userID: message.user.ID,
+			    result: 'failure'
+			});
+		    }
+		    else {
+			query = "UPDATE clubKenyon SET posY = '"+potentialY+"' WHERE ID='"+message.userID+"'";
+			con.query(query, function (err, result, fields) {
+			    if (err) throw err;
+			    console.log("new y is: "+potentialY);
+			});
+		    }
+				  
+		}
+	    });
+
+
+	    /*
+	    console.log(output);
+	    process.nextTick( () => {
+		console.log(output.posX);
+	    });
+	    
+	    */
+
+	    
+	    console.log("userID is: "+message.userID+" and button pressed is: "+message.button);
+
+	}
 
   });
 });
@@ -98,7 +227,7 @@ function sendQueryResults(query,socket) {
 		Object.keys(result).forEach(function(key) {
 			var row = result[key];
 			results.push(row);
-			//console.log(row.First+" "+row.Last+", Phone:"+row.Phone+"  ["+row.Type+"]");	    	
+			console.log(row.ID+" "+row.sprite+" "+row.posX+" "+row.posY+" ");	    	
 		});
 		socket.emit('message', {
     		operation: 'rows',

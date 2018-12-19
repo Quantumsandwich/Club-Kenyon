@@ -9,8 +9,20 @@ var selectid;
 var recIndex
 var socket = io.connect('http://cslab.kenyon.edu:'+port);
 var rows;
+
+//some things for controls
+var leftPressed = false;
+var rightPressed = false;
+var upPressed = false;
+var downPressed = false;
+
+var userID = 1;
+
 // Set up events when page is ready
 $(document).ready(function () {
+
+    setInterval(sendPushed,100);
+    
     // this is an event handler for a message on socket.io from the server side.
     // For this program is will be a reponse to a request from this page for an action
     socket.on('message', function(message) {
@@ -45,6 +57,9 @@ $(document).ready(function () {
 
     });
 
+
+    
+    
     operation = "Author"; // Default operation
 
     // Clear everything on startup
@@ -68,6 +83,85 @@ $(document).ready(function () {
 
     
 });
+
+$(document).keydown(function(e) {
+    keyDownHandler(e);
+    e.preventDefault();
+    console.log("keydown");
+});
+$(document).keyup(function(e) {
+    keyUpHandler(e);
+    e.preventDefault();
+    console.log("keyup");
+});
+
+
+function sendPushed(){
+
+    if(leftPressed){
+	socket.emit('message', {
+	    operation: "keypress",
+	    userID: userID,
+	    button: "left"
+	});
+    }
+    if(rightPressed){
+	socket.emit('message', {
+	    operation: "keypress",
+	    userID: userID,
+	    button: "right"
+	});
+    }
+    if(upPressed){
+	socket.emit('message', {
+	    operation: "keypress",
+	    userID: userID,
+	    button: "up"
+	});
+    }
+    if(downPressed){
+	socket.emit('message', {
+	    operation: "keypress",
+	    userID: userID,
+	    button: "down"
+	});}
+    
+    
+   
+    
+}
+    
+    function keyDownHandler(e){
+	if(e.keyCode == 39){
+	    rightPressed = true;
+	}
+	else if(e.keyCode == 37){
+	    leftPressed = true;
+	}
+	else if(e.keyCode == 38){
+	    upPressed = true;
+	}
+	else if(e.keyCode == 40){
+	    downPressed = true;
+	}
+    }
+
+    function keyUpHandler(e){
+	if(e.keyCode == 39){
+	    rightPressed = false;
+	}
+	else if(e.keyCode == 37){
+	    leftPressed = false;
+	}
+	else if(e.keyCode == 38){
+	    upPressed = false;
+	}
+	else if(e.keyCode == 40){
+	    downPressed = false;
+	}
+    }
+
+
 
 // This processes the results from the server after we have sent it a lookup request.
 // This clears any previous work, and then calls buildTable to create a nice
@@ -171,6 +265,16 @@ function addEntry(){
     	Type: $('#addtype').val()
     });	
 }
+
+function sendKeypress(userID, e){
+    socket.emit('message', {
+	operation: "keypress",
+	userID: userID,
+	button: e.keyCode
+    });
+    console.log("sent message about move");
+}
+	
 	
 // This is called when the user clicks on a "Delete" button on a row matches from a search.
 // It puts up a modal asking the user to confirm if they really want to delete this record.  If they
@@ -211,6 +315,7 @@ function getMatches(){
     	searchText: search
     });
 }
+
 
 
 	
