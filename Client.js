@@ -9,23 +9,8 @@ var selectid;
 var recIndex
 var socket = io.connect('http://cslab.kenyon.edu:'+port);
 var rows;
-
-//some things for controls
-var leftPressed = false;
-var rightPressed = false;
-var upPressed = false;
-var downPressed = false;
-
-var userID = 1;
-
 // Set up events when page is ready
 $(document).ready(function () {
-
-    if(rightPressed){
-	sendKeypress();
-	console.log("right button pressed");
-    }
-    
     // this is an event handler for a message on socket.io from the server side.
     // For this program is will be a reponse to a request from this page for an action
     socket.on('message', function(message) {
@@ -60,9 +45,6 @@ $(document).ready(function () {
 
     });
 
-
-    
-    
     operation = "Author"; // Default operation
 
     // Clear everything on startup
@@ -86,42 +68,6 @@ $(document).ready(function () {
 
     
 });
-
-$(document).addEventListener("keydown",keyDownHandler,false);
-$(document).addEventListener("keyup",keyUpHandler,false);
-
-    
-    function keyDownHandler(e){
-	if(e.keyCode == 39){
-	    rightPressed = true;
-	}
-	else if(e.keyCode == 37){
-	    leftPressed = true;
-	}
-	else if(e.keyCode == 38){
-	    upPressed = true;
-	}
-	else if(e.keyCode == 40){
-	    downPressed = true;
-	}
-    }
-
-    function keyUpHandler(e){
-	if(e.keyCode == 39){
-	    rightPressed = false;
-	}
-	else if(e.keyCode == 37){
-	    leftPressed = false;
-	}
-	else if(e.keyCode == 38){
-	    upPressed = false;
-	}
-	else if(e.keyCode == 40){
-	    downPressed = false;
-	}
-    }
-
-
 
 // This processes the results from the server after we have sent it a lookup request.
 // This clears any previous work, and then calls buildTable to create a nice
@@ -225,16 +171,6 @@ function addEntry(){
     	Type: $('#addtype').val()
     });	
 }
-
-function sendKeypress(userID, e){
-    socket.emit('message', {
-	operation: "keypress",
-	userID: userID,
-	button: e.keyCode
-    });
-    console.log("sent message about move");
-}
-	
 	
 // This is called when the user clicks on a "Delete" button on a row matches from a search.
 // It puts up a modal asking the user to confirm if they really want to delete this record.  If they
