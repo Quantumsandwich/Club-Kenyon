@@ -111,10 +111,19 @@ var output;
 		    var row = result[key];
 		    results.push(row);
 		});
-		output = results;
+		console.log(results);
+		console.log("posX: "+results[0].posX);
 	    });
 
+
+	    /*
 	    console.log(output);
+	    process.nextTick( () => {
+		console.log(output.posX);
+	    });
+	    
+	    */
+
 	    
 	    console.log("userID is: "+message.userID+" and button pressed is: "+message.button);
 
