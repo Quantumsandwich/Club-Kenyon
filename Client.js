@@ -86,12 +86,12 @@ $(document).ready(function () {
 
 $(document).keydown(function(e) {
     keyDownHandler(e);
-    e.preventDefault();
+    //e.preventDefault();
     console.log("keydown");
 });
 $(document).keyup(function(e) {
     keyUpHandler(e);
-    e.preventDefault();
+    //e.preventDefault();
     console.log("keyup");
 });
 
@@ -218,7 +218,7 @@ function buildTable(rows) {
 		var canvas = document.getElementById('myCanvas');
 		var ctx = canvas.getContext('2d');
 		ctx.fillStyle = '#000000';
-		ctx.fillRect(rows[i].posX,0,20,20);
+		ctx.fillRect(rows[i].posX,rows[i].posY,20,20);
 		
 		/*
 	    result += "<tr><td class='Author'>"+rows[i].Author+"</td><td class='Title'>"+rows[i].Title+"</td><td class='Technique'>"+rows[i].Technique+"</td><td class='School'>"+rows[i].School+"</td><td class='School'>"+rows[i].URL+"</td>";
@@ -327,12 +327,9 @@ function clearResults() {
 // Where operation is one of (Last, First, Type) 
 function getMatches(){
     $('.editdata').hide();
-    var search = $('#search').val();
-    $('#searchresults').empty();
-    socket.emit('message', {
-    	operation: operation,
-    	searchText: search
-    });
+    userID = $('#search').val();
+   
+  
 }
 
 
