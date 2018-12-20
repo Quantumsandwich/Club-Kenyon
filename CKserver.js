@@ -77,8 +77,25 @@ io.sockets.on('connection', function(socket) {
 
     function daLoop(){
     query = "SELECT * FROM clubKenyon WHERE changed=0";
-    console.log("looped query is working");
-    sendQueryResults(query, socket);
+    //console.log("looped query is working");
+
+	con.query(query, function (err, result, fields) {
+		if (err) throw err;
+		var results = [];
+		Object.keys(result).forEach(function(key) {
+		    var row = result[key];
+		    results.push(row);
+		});
+	    socket.emit('message', {
+		operation: "refresh",
+		output: results[0]
+	    });
+			console.log("the results are"+results);
+	});
+		  
+	    
+		
+
     }
 
     setInterval(daLoop,1000);
