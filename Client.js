@@ -124,8 +124,7 @@ function sendPushed(){
 	    operation: "keypress",
 	    userID: userID,
 	    button: "down"
-	});
-    }
+	});}
     
     
    
@@ -211,7 +210,7 @@ function buildTable(rows) {
 	ctx.fillStyle = '#FFFFFF';
 	ctx.fillRect(0,0,1000,563);
 	
-	for (var i=0;i<rows.length;i++) {	//This loop is run once per player
+	for (var i=0;i<rows.length;i++) {
 	    console.log("row:"+JSON.stringify(rows[i]));
 		
 		console.log("the thing is: "+rows[i].posX);
@@ -297,8 +296,6 @@ function addEntry(){
     });	
 }
 
-
-//this sends a keypress to the server
 function sendKeypress(userID, e){
     socket.emit('message', {
 	operation: "keypress",
@@ -307,6 +304,45 @@ function sendKeypress(userID, e){
     });
     console.log("sent message about move");
 }
+	
+	
+// This is called when the user clicks on a "Delete" button on a row matches from a search.
+// It puts up a modal asking the user to confirm if they really want to delete this record.  If they
+// hit "Delete record", the processDelete function is called to do the delete.
+function displayArt() {
+    selectid=$(this).attr('ID');
+    recIndex=$(this).attr('index');
+    $('#Message').text("Date: "+rows[recIndex].Date+" || Location: "+rows[recIndex].Location+" || Form: "+rows[recIndex].Form+" || Timeframe: "+rows[recIndex].Timeframe+" || Notes: "+rows[recIndex].notes);
+    console.log(rows[recIndex].URL);
+    $('#photo').attr('src', rows[recIndex].URL);
+    $('#displayArt').modal('show');
+    $('.completeDelete').click(processDelete);
+}
+
+// Calls the server with a recordID of a row to delete
+function processDelete(){
+    var id=$(this).attr('ID');
+    socket.emit('message', {
+    	operation: "Delete",
+    	RecNum: selectid
+    });	
+}
+
+// Clears the search results area on the screen
+function clearResults() {
+    $('#searchresults').empty();
+}
+
+// Called when the user hits the "Search" button.
+// It sends a request to the server (operation,search string),
+// Where operation is one of (Last, First, Type) 
+function getMatches(){
+    $('.editdata').hide();
+    userID = $('#search').val();
+   
+  
+}
+
 
 //call this function to send a message to the server
 //argument is the content of the message
@@ -319,16 +355,6 @@ function sendMessage(theMessage){
     });
     console.log("User with ID: "+userID+" sent message: "+theMessage+" to the server.");
 }
-
-
-// Called when the user hits the "enter ID" button. 
-function getMatches(){
-    $('.editdata').hide();
-    userID = $('#search').val();
-   
-  
-}
-
 
 
 	

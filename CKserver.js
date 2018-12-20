@@ -18,6 +18,8 @@ var rightEdge = canvasWidth - charHalfWidth;
 var topEdge = 0 + charHalfHeight;
 var bottomEdge = canvasHeight - charHalfHeight;
 
+var messageDisplayTime;
+
 
 
 //Everyone must use own port > 8000
@@ -89,10 +91,34 @@ var output;
   // watch for message from client (JSON)
     socket.on('message', function(message) {
 
+	//I removed the old content from here via comment
 
+	/*
+	
+      //console.log('Client Command:'+message.operation);
+    if (message.operation == 'Author') {
+      query = "SELECT * FROM art WHERE Author like '%"+message.searchText+"%' AND Form like '"+message.formText+"' AND Type like '"+message.typeText+"'";
+      sendQueryResults(query, socket);
+    } else if (message.operation == 'Title') {
+      query = "SELECT * FROM art WHERE Title like '%"+message.searchText+"%' AND Form like '"+message.formText+"' AND Type like '"+message.typeText+"'";
+      sendQueryResults(query, socket);
+    } else if (message.operation == 'Technique') {
+      query = "SELECT * FROM art WHERE Technique like '%"+message.searchText+"%' AND Form like '"+message.formText+"' AND Type like '"+message.typeText+"'";
+      sendQueryResults(query, socket);
+    } else if (message.operation == 'School') {
+      query = "SELECT * FROM art WHERE School like '%"+message.searchText+"%' AND Form like '"+message.formText+"' AND Type like '"+message.typeText+"'";
+      sendQueryResults(query, socket);
+    } else if (message.operation == 'Notes') {
+      query = "UPDATE art SET Notes='"+message.Notes+"' WHERE URL='"+message.URL+"'";
+      UpdateRow(query, socket);
+    }
+     // console.log("query is: "+query);
+     */
 	if (message.operation == 'keypress'){
 	
-
+	//query = "SELECT * FROM clubKenyon WHERE changed=0";
+	//console.log("query is: "+query);
+	//sendQueryResults(query, socket);
 
 	    query = "SELECT posX, posY FROM clubKenyon WHERE ID='"+message.userID+"'";
 
@@ -172,17 +198,48 @@ var output;
 			    if (err) throw err;
 			    console.log("new y is: "+potentialY);
 			});
-		    }		  
+		    }
+				  
 		}
+		
+		else if (message.button == 'send'){
+		    //var theMessage = message.text;
+		    query = "UPDATE clubKenyon SET lastMessage = '"+message.text+"' WHERE ID='"+message.userID+"'";
+		    con.query(query, function (err, result, fields) {
+			if (err) throw err;
+			console.log("message entered: "+message.text);
+		    });
+		    query = "UPDATE clubKenyon SET displayed = '1' WHERE ID='"+message.userID+"'";
+		    con.query(query, function (err, result, fields) {
+			if (err) throw err;
+			console.log("displayed set to 1");
+		    });
+		    setTimeout(setDisplayedToZero, messageDisplayTime, message.userID);
+		}
+		
+		
+		
+		
 	    });
 
+
+	    /*
+	    console.log(output);
+	    process.nextTick( () => {
+		console.log(output.posX);
+	    });
+	    
+	    */
 
 	    
 	    console.log("userID is: "+message.userID+" and button pressed is: "+message.button);
 
 	}
-<<<<<<< HEAD
+
+  });
 });
+
+
 
 //set a user's displayed value to 0
 function setDisplayedToZero(userID){
@@ -192,11 +249,9 @@ function setDisplayedToZero(userID){
 	if (err) throw err;
 	console.log("userID "+userID+" has had their last message set as not displayed");
     });
-=======
->>>>>>> ecd34b5a2c2e3b0605ba5c8846202ed9a65e8bf0
 
-  });
-});
+}
+
 
 // Perform search, send results to caller
 function sendQueryResults(query,socket) {
