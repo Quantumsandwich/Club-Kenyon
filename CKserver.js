@@ -122,7 +122,8 @@ var output;
 	    query = "SELECT posX, posY FROM clubKenyon WHERE ID='"+message.userID+"'";
 
 	    con.query(query, function (err, result, fields) {
-		if (err) throw err;
+		//if (err) throw err;
+		if (err) console.log("error on line 126");
 		var results = [];
 		Object.keys(result).forEach(function(key) {
 		    var row = result[key];
@@ -135,7 +136,7 @@ var output;
 		    var potentialX =  results[0].posX * 1 - deltaX;
 		    if (potentialX < leftEdge){
 			io.to(socket.id).emit('message', {
-			    userID: message.user.ID,
+			    userID: message.userID,
 			    result: 'failure'
 			});
 		    }
@@ -152,7 +153,7 @@ var output;
 		    var potentialX =  results[0].posX * 1 + deltaX;
 		    if (potentialX > rightEdge){
 			io.to(socket.id).emit('message', {
-			    userID: message.user.ID,
+			    userID: message.userID,
 			    result: 'failure'
 			});
 		    }
@@ -169,7 +170,7 @@ var output;
 		    var potentialY =  results[0].posY * 1 - deltaY;
 		    if (potentialY < topEdge){
 			io.to(socket.id).emit('message', {
-			    userID: message.user.ID,
+			    userID: message.userID,
 			    result: 'failure'
 			});
 		    }
@@ -186,7 +187,7 @@ var output;
 		    var potentialY =  results[0].posY * 1 + deltaY;
 		    if (potentialY > bottomEdge){
 			io.to(socket.id).emit('message', {
-			    userID: message.user.ID,
+			    userID: message.userID,
 			    result: 'failure'
 			});
 		    }
