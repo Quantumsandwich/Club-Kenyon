@@ -18,9 +18,7 @@ var rightEdge = canvasWidth - charHalfWidth;
 var topEdge = 0 + charHalfHeight;
 var bottomEdge = canvasHeight - charHalfHeight;
 
-var messageDisplayTime = 5000; //time to display messages for, in ms
 
-var refreshTime = 200; //time between each refresh, in ms
 
 //Everyone must use own port > 8000
 // Must Match client side port setting
@@ -79,28 +77,11 @@ io.sockets.on('connection', function(socket) {
 
     function daLoop(){
     query = "SELECT * FROM clubKenyon WHERE changed=0";
-    //console.log("looped query is working");
-
-	con.query(query, function (err, result, fields) {
-		if (err) throw err;
-		var results = [];
-		Object.keys(result).forEach(function(key) {
-		    var row = result[key];
-		    results.push(row);
-		});
-	    socket.emit('message', {
-		operation: "refresh",
-		output: results[0]
-	    });
-			console.log("the results are"+results);
-	});
-		  
-	    
-		
-
+    console.log("looped query is working");
+    sendQueryResults(query, socket);
     }
 
-    setInterval(daLoop,refreshTime);
+    setInterval(daLoop,1000);
 
 //this variable will be used to pull things out of a function
 var output;
@@ -108,16 +89,16 @@ var output;
   // watch for message from client (JSON)
     socket.on('message', function(message) {
 
+
 	if (message.operation == 'keypress'){
 	
-	//query = "SELECT * FROM clubKenyon WHERE changed=0";
-	//console.log("query is: "+query);
-	//sendQueryResults(query, socket);
+
 
 	    query = "SELECT posX, posY FROM clubKenyon WHERE ID='"+message.userID+"'";
 
 	    con.query(query, function (err, result, fields) {
-		if (err) throw err;
+		//if (err) throw err;
+		if (err) console.log("error on line 126");
 		var results = [];
 		Object.keys(result).forEach(function(key) {
 		    var row = result[key];
@@ -130,7 +111,7 @@ var output;
 		    var potentialX =  results[0].posX * 1 - deltaX;
 		    if (potentialX < leftEdge){
 			io.to(socket.id).emit('message', {
-			    userID: message.user.ID,
+			    userID: message.userID,
 			    result: 'failure'
 			});
 		    }
@@ -147,7 +128,7 @@ var output;
 		    var potentialX =  results[0].posX * 1 + deltaX;
 		    if (potentialX > rightEdge){
 			io.to(socket.id).emit('message', {
-			    userID: message.user.ID,
+			    userID: message.userID,
 			    result: 'failure'
 			});
 		    }
@@ -164,7 +145,7 @@ var output;
 		    var potentialY =  results[0].posY * 1 - deltaY;
 		    if (potentialY < topEdge){
 			io.to(socket.id).emit('message', {
-			    userID: message.user.ID,
+			    userID: message.userID,
 			    result: 'failure'
 			});
 		    }
@@ -181,7 +162,7 @@ var output;
 		    var potentialY =  results[0].posY * 1 + deltaY;
 		    if (potentialY > bottomEdge){
 			io.to(socket.id).emit('message', {
-			    userID: message.user.ID,
+			    userID: message.userID,
 			    result: 'failure'
 			});
 		    }
@@ -191,39 +172,16 @@ var output;
 			    if (err) throw err;
 			    console.log("new y is: "+potentialY);
 			});
-		    }
-				  
+		    }		  
 		}
-		else if (message.button == 'send'){
-		    //var theMessage = message.text;
-		    query = "UPDATE clubKenyon SET lastMessage = '"+message.text+"' WHERE ID='"+message.userID+"'";
-		    con.query(query, function (err, result, fields) {
-			if (err) throw err;
-			console.log("message entered: "+message.text);
-		    });
-		    query = "UPDATE clubKenyon SET displayed = '1' WHERE ID='"+message.userID+"'";
-		    con.query(query, function (err, result, fields) {
-			if (err) throw err;
-			console.log("displayed set to 1");
-		    });
-		    setTimeout(setDisplayedToZero, messageDisplayTime, message.userID);
-		}
-
-
-	    /*
-	    console.log(output);
-	    process.nextTick( () => {
-		console.log(output.posX);
 	    });
-	    
-	    */
+
 
 	    
 	    console.log("userID is: "+message.userID+" and button pressed is: "+message.button);
 
-	    });
-
 	}
+<<<<<<< HEAD
 });
 
 //set a user's displayed value to 0
@@ -234,8 +192,11 @@ function setDisplayedToZero(userID){
 	if (err) throw err;
 	console.log("userID "+userID+" has had their last message set as not displayed");
     });
+=======
+>>>>>>> ecd34b5a2c2e3b0605ba5c8846202ed9a65e8bf0
 
-}
+  });
+});
 
 // Perform search, send results to caller
 function sendQueryResults(query,socket) {
