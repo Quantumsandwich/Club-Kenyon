@@ -3,6 +3,23 @@ var http = require('http');
 var fs = require('fs');
 
 
+
+//Some gameplay related variables
+var deltaX = 5;
+var deltaY = 5;
+
+var canvasHeight = 563;
+var canvasWidth = 1000;
+
+var charHalfWidth = 5;
+var charHalfHeight = 10;
+var leftEdge = 0 + charHalfWidth;
+var rightEdge = canvasWidth - charHalfWidth;
+var topEdge = 0 + charHalfHeight;
+var bottomEdge = canvasHeight - charHalfHeight;
+
+
+
 //Everyone must use own port > 8000
 // Must Match client side port setting
 var port = 9669; //Ben changed the port to 9669 for CK server
@@ -113,6 +130,75 @@ var output;
 		});
 		console.log(results);
 		console.log("posX: "+results[0].posX);
+
+		if (message.button == 'left'){
+		    var potentialX =  results[0].posX * 1 - deltaX;
+		    if (potentialX < leftEdge){
+			io.to(socket.id).emit('message', {
+			    userID: message.user.ID,
+			    result: 'failure'
+			});
+		    }
+		    else {
+			query = "UPDATE clubKenyon SET posX = '"+potentialX+"' WHERE ID='"+message.userID+"'";
+			con.query(query, function (err, result, fields) {
+			    if (err) throw err;
+			    console.log("new x is: "+potentialX);
+			});
+		    }
+				  
+		}
+		else if (message.button == 'right'){
+		    var potentialX =  results[0].posX * 1 + deltaX;
+		    if (potentialX > rightEdge){
+			io.to(socket.id).emit('message', {
+			    userID: message.user.ID,
+			    result: 'failure'
+			});
+		    }
+		    else {
+			query = "UPDATE clubKenyon SET posX = '"+potentialX+"' WHERE ID='"+message.userID+"'";
+			con.query(query, function (err, result, fields) {
+			    if (err) throw err;
+			    console.log("new x is: "+potentialX);
+			});
+		    }
+				  
+		}
+		else if (message.button == 'up'){
+		    var potentialY =  results[0].posY * 1 - deltaY;
+		    if (potentialY < topEdge){
+			io.to(socket.id).emit('message', {
+			    userID: message.user.ID,
+			    result: 'failure'
+			});
+		    }
+		    else {
+			query = "UPDATE clubKenyon SET posY = '"+potentialY+"' WHERE ID='"+message.userID+"'";
+			con.query(query, function (err, result, fields) {
+			    if (err) throw err;
+			    console.log("new y is: "+potentialY);
+			});
+		    }
+				  
+		}
+		else if (message.button == 'down'){
+		    var potentialY =  results[0].posY * 1 + deltaY;
+		    if (potentialY > bottomEdge){
+			io.to(socket.id).emit('message', {
+			    userID: message.user.ID,
+			    result: 'failure'
+			});
+		    }
+		    else {
+			query = "UPDATE clubKenyon SET posY = '"+potentialY+"' WHERE ID='"+message.userID+"'";
+			con.query(query, function (err, result, fields) {
+			    if (err) throw err;
+			    console.log("new y is: "+potentialY);
+			});
+		    }
+				  
+		}
 	    });
 
 
