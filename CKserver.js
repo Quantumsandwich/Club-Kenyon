@@ -18,7 +18,7 @@ var rightEdge = canvasWidth - charHalfWidth;
 var topEdge = 0 + charHalfHeight;
 var bottomEdge = canvasHeight - charHalfHeight;
 
-
+var messageDisplayTime = 5000; //time to display messages for, in ms
 
 //Everyone must use own port > 8000
 // Must Match client side port setting
@@ -215,6 +215,19 @@ var output;
 		    }
 				  
 		}
+		else if (message.button == 'send'){
+		    //var theMessage = message.text;
+		    query = "UPDATE clubKenyon SET lastMessage = '"+message.text+"' WHERE ID='"+message.userID+"'";
+		    con.query(query, function (err, result, fields) {
+			if (err) throw err;
+			console.log("message entered: "+message.text);
+		    });
+		    query = "UPDATE clubKenyon SET displayed = '1' WHERE ID='"+message.userID+"'";
+		    con.query(query, function (err, result, fields) {
+			if (err) throw err;
+			console.log("displayed set to 1");
+		    });
+		    setTimeout(setDisplayedToZero, messageDisplayTime, message.userID);
 	    });
 
 
@@ -233,6 +246,17 @@ var output;
 
   });
 });
+
+//set a user's displayed value to 0
+	      function setDisplayedToZero(userID){
+
+		  query = "UPDATE clubKenyon SET displayed = '1' WHERE ID='"+userID+"'";
+		    con.query(query, function (err, result, fields) {
+			if (err) throw err;
+			console.log("userID "+userID+" has had their last message set as not displayed");
+		    });
+
+	      }
 
 // Perform search, send results to caller
 function sendQueryResults(query,socket) {
