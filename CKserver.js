@@ -18,8 +18,8 @@ var rightEdge = canvasWidth - charHalfWidth;
 var topEdge = 0 + charHalfHeight;
 var bottomEdge = canvasHeight - charHalfHeight;
 
-var messageDisplayTime;
-
+var messageDisplayTime = 5000; //time until message goes away
+var refreshTime = 200; //time until next refresh
 
 
 //Everyone must use own port > 8000
@@ -83,7 +83,7 @@ io.sockets.on('connection', function(socket) {
     sendQueryResults(query, socket);
     }
 
-    setInterval(daLoop,1000);
+    setInterval(daLoop,refreshTime);
 
 //this variable will be used to pull things out of a function
 var output;
