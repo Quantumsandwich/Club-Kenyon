@@ -210,7 +210,7 @@ function buildTable(rows) {
 	ctx.fillStyle = '#FFFFFF';
 	ctx.fillRect(0,0,1000,563);
 	
-	for (var i=0;i<rows.length;i++) {
+	for (var i=0;i<rows.length;i++) {	//This loop is run once per player
 	    console.log("row:"+JSON.stringify(rows[i]));
 		
 		console.log("the thing is: "+rows[i].posX);
@@ -219,6 +219,17 @@ function buildTable(rows) {
 		var ctx = canvas.getContext('2d');
 		ctx.fillStyle = '#000000';
 		ctx.fillRect(rows[i].posX,rows[i].posY,20,20);
+		
+		console.log("before printing: "+rows[i].lastMessage);
+		console.log("before printing: "+rows[i].displayed);
+		if (rows[i].displayed == 1) {
+			var canvas = document.getElementById("myCanvas");
+			var ctx = canvas.getContext("2d");
+			ctx.font = "10px Arial";
+			ctx.fillText(rows[i].lastMessage,10,10);
+			console.log("after printing: "+rows[i].lastMessage);
+			
+		}
 		
 		/*
 	    result += "<tr><td class='Author'>"+rows[i].Author+"</td><td class='Title'>"+rows[i].Title+"</td><td class='Technique'>"+rows[i].Technique+"</td><td class='School'>"+rows[i].School+"</td><td class='School'>"+rows[i].URL+"</td>";
