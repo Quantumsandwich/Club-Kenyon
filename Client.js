@@ -28,32 +28,17 @@ $(document).ready(function () {
     socket.on('message', function(message) {
 	// 'rows' message contains a set of matching rows from the database to be displayed
 	// This is a response to a query
-  	if (message.operation == 'rows') {
-	    processResults(message.rows);
-  	}
-	// The Add message is call back after a request to add a new row to the phone directory
-	// It creates a modal with the first and last name, and the status (success, failure) from the server.
-	//It also clears out the data entered into the add fields
-  	if (message.operation == 'Add') {
-  	    $('#modalMessage').text($('#addfirst').val()+" "+$('#addlast').val()+ ": "+message.Status);
-  	    $('#modalTitle').text("Record Add");
-  	    $('#addchangemodal').modal('show');
-  	    $('#addfirst').val("");
-  	    $('#addlast').val("");
-  	    $('#addphone').val("");
-  	    $('#addtype').val("");
-  	}
-	// The update message is a response after asking the server to update a row.
-	// Dispays the status message from the server in a modal
-  	if (message.operation == 'update') {
-  	    $('#modalMessage').text($('#editfirst').val()+" "+$('#editlast').val()+ ": "+message.Status);
-  	    $('#modalTitle').text("Record Change");
-  	    $('#addchangemodal').modal('show');
-  	}
-	// Displays a message after a record is delected
-  	if (message.operation == 'delete') {
-  	    $('#searchresults').text("Deleted: "+rows[recIndex].First+" "+rows[recIndex].Last);
-  	}
+  	
+//	    processResults(message.posX, message.posY);   THIS RELIES ON PROCESS RESULTS && 
+		console.log("I processed results");
+		
+		var c = document.getElementById("myCanvas");
+		var ctx = c.getContext("2d");
+		var img = document.getElementById("sprite1");
+		ctx.drawImage(img, 10, 10);
+  	
+
+	
 
     });
 
@@ -167,15 +152,15 @@ function sendPushed(){
 // This clears any previous work, and then calls buildTable to create a nice
 // Table of the results, and pushes it to the screen.
 // The rows are all saved in "rows" so we can later edit the data if the user hits "Edit"
-function processResults(results) {
+function processResults(resultX, resultY) {
     $('#editmessage').empty();
     $('#addmessage').empty();
     //console.log("Results:"+results);
     $('#searchresults').empty();
-    $('#searchresults').append(buildTable(results));
-    rows=results;  // Save everything for delete
-    $(".edit").click(processEdit);
-    $(".delete").click(displayArt);
+    $('#searchresults').append(buildTable(resultX, resultY));
+      // Save everything for delete     CHANGE ROWS ---> GAME OR SOMETHING
+    
+    
     
 }
 changeOperation(operation);
@@ -199,23 +184,34 @@ function changeOperation(operation){
 }
 
 // Build output table from comma delimited data list from the server (a list of phone entries)
-function buildTable(rows) {
-    if (rows.length < 1) {
-	return "<h3>Nothing Found</h3>";
-    } else {
-	var result = '<table class="w3-table-all w3-hoverable" border="2"><tr><th>Author</th><th>Title</th><th>Technique</th><th>School</th><th>Action</th><tr>';
+/*function buildTable(xcord, ycord) {
+   
+	var result;
+//	= '<table class="w3-table-all w3-hoverable" border="2"><tr><th>Author</th><th>Title</th><th>Technique</th><th>School</th><th>Action</th><tr>';
 	
-	for (var i=0;i<rows.length;i++) {
-	    console.log("row:"+JSON.stringify(rows[i]));
-	    result += "<tr><td class='Author'>"+rows[i].Author+"</td><td class='Title'>"+rows[i].Title+"</td><td class='Technique'>"+rows[i].Technique+"</td><td class='School'>"+rows[i].School+"</td><td class='School'>"+rows[i].URL+"</td>";
-	    result += "<td><button type='button' ID='"+rows[i].RecNum+"' class='btn btn-primary btn-sm edit'>notes</button> ";
-	    result += "<button type='button' ID='"+rows[i].RecNum+"' Index='"+i+"' class='btn btn-primary btn-sm delete'>display</button></td></tr>";	
-	}
-	result += "</table>";
+//	for (var i=0;i<rows.length;i++) {
+//	    console.log("row:"+JSON.stringify(rows[i]));
+	    result += "<script>";
+	    result += "var canvas = document.getElementById('myCanvas');";
+	    result += "var ctx = canvas.getContext('2d');";
+	    result += "ctx.fillStyle = '#000000';";	
+	    result += "ctx.fillRect("+xcord+","+ycord+",20,20);";
+//		result += "ctx.fillRect("45","60",20,20);";
+	    result += "</script>";
+		
+		result += "<script>";
+	    result += "var canvas = document.getElementById('myCanvas');";
+	    result += "var ctx = canvas.getContext('2d');";
+	    result += "ctx.fillStyle = '#000000';";	
+	    result += "ctx.fillRect(250,180,20,50);";
+	    result += "</script>";
+	
+//	}
+//	result += "</table>";
 	
 	return result;
-    }
-}
+    
+}*/
 // Called when the user clicks on the Edit button on the results list from a search
 // This clears the search  results and shows the edit form, filling it in with the data from the associated record.
 // We get the "row" node for $(this) so we have the tight record to edit
