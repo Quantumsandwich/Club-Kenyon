@@ -227,7 +227,7 @@ function buildTable(rows) {
 			var canvas = document.getElementById("myCanvas");
 			var ctx = canvas.getContext("2d");
 			ctx.font = "10px Arial";
-			ctx.fillText(rows[i].lastMessage,10,10);
+			ctx.fillText(rows[i].lastMessage,rows[i].posX,rows[i].posY-10);
 			console.log("after printing: "+rows[i].lastMessage);
 			
 		}
