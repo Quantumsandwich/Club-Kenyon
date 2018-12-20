@@ -20,6 +20,8 @@ var bottomEdge = canvasHeight - charHalfHeight;
 
 var messageDisplayTime = 5000; //time to display messages for, in ms
 
+var refreshTime = 200; //time between each refresh, in ms
+
 //Everyone must use own port > 8000
 // Must Match client side port setting
 var port = 9669; //Ben changed the port to 9669 for CK server
@@ -98,7 +100,7 @@ io.sockets.on('connection', function(socket) {
 
     }
 
-    setInterval(daLoop,1000);
+    setInterval(daLoop,refreshTime);
 
 //this variable will be used to pull things out of a function
 var output;
@@ -106,29 +108,6 @@ var output;
   // watch for message from client (JSON)
     socket.on('message', function(message) {
 
-	//I removed the old content from here via comment
-
-	/*
-	
-      //console.log('Client Command:'+message.operation);
-    if (message.operation == 'Author') {
-      query = "SELECT * FROM art WHERE Author like '%"+message.searchText+"%' AND Form like '"+message.formText+"' AND Type like '"+message.typeText+"'";
-      sendQueryResults(query, socket);
-    } else if (message.operation == 'Title') {
-      query = "SELECT * FROM art WHERE Title like '%"+message.searchText+"%' AND Form like '"+message.formText+"' AND Type like '"+message.typeText+"'";
-      sendQueryResults(query, socket);
-    } else if (message.operation == 'Technique') {
-      query = "SELECT * FROM art WHERE Technique like '%"+message.searchText+"%' AND Form like '"+message.formText+"' AND Type like '"+message.typeText+"'";
-      sendQueryResults(query, socket);
-    } else if (message.operation == 'School') {
-      query = "SELECT * FROM art WHERE School like '%"+message.searchText+"%' AND Form like '"+message.formText+"' AND Type like '"+message.typeText+"'";
-      sendQueryResults(query, socket);
-    } else if (message.operation == 'Notes') {
-      query = "UPDATE art SET Notes='"+message.Notes+"' WHERE URL='"+message.URL+"'";
-      UpdateRow(query, socket);
-    }
-     // console.log("query is: "+query);
-     */
 	if (message.operation == 'keypress'){
 	
 	//query = "SELECT * FROM clubKenyon WHERE changed=0";
@@ -228,7 +207,7 @@ var output;
 			console.log("displayed set to 1");
 		    });
 		    setTimeout(setDisplayedToZero, messageDisplayTime, message.userID);
-	    });
+		}
 
 
 	    /*
@@ -242,21 +221,21 @@ var output;
 	    
 	    console.log("userID is: "+message.userID+" and button pressed is: "+message.button);
 
-	}
+	    });
 
-  });
+	}
 });
 
 //set a user's displayed value to 0
-	      function setDisplayedToZero(userID){
+function setDisplayedToZero(userID){
 
-		  query = "UPDATE clubKenyon SET displayed = '1' WHERE ID='"+userID+"'";
-		    con.query(query, function (err, result, fields) {
-			if (err) throw err;
-			console.log("userID "+userID+" has had their last message set as not displayed");
-		    });
+    query = "UPDATE clubKenyon SET displayed = '1' WHERE ID='"+userID+"'";
+    con.query(query, function (err, result, fields) {
+	if (err) throw err;
+	console.log("userID "+userID+" has had their last message set as not displayed");
+    });
 
-	      }
+}
 
 // Perform search, send results to caller
 function sendQueryResults(query,socket) {
