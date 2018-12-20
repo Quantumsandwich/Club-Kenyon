@@ -128,7 +128,6 @@ var output;
       UpdateRow(query, socket);
     }
      // console.log("query is: "+query);
-
      */
 	if (message.operation == 'keypress'){
 	
