@@ -174,8 +174,7 @@ function processResults(results) {
     $('#searchresults').empty();
     $('#searchresults').append(buildTable(results));
     rows=results;  // Save everything for delete
-    $(".edit").click(processEdit);
-    $(".delete").click(displayArt);
+ 
     
 }
 changeOperation(operation);
@@ -200,36 +199,158 @@ function changeOperation(operation){
 
 // Build output table from comma delimited data list from the server (a list of phone entries)
 function buildTable(rows) {
-    if (rows.length < 1) {
-	return "<h3>Nothing Found</h3>";
-    } else {
+    //if (rows.length < 1) {
+	//return "<h3>Nothing Found</h3>";
+    //} else {
 	//var result = '<table class="w3-table-all w3-hoverable" border="2"><tr><th>Author</th><th>Title</th><th>Technique</th><th>School</th><th>Action</th><tr>';
 	
+	
+	//please pardon this horrendous list, I had no time to do it another way
 	var canvas = document.getElementById('myCanvas');
 	var ctx = canvas.getContext('2d');
 	ctx.fillStyle = '#FFFFFF';
 	ctx.fillRect(0,0,1000,563);
+	//really, I'm sorry about the furniture
 	
+	//blackboard
+	var canvas = document.getElementById('myCanvas');
+	var ctx = canvas.getContext('2d');
+	ctx.fillStyle = '#000000';
+	ctx.fillRect(30,20,930,50);
+	
+	
+	//The tables (THIS ONE'S A LONG ONE)
+	var canvas = document.getElementById('myCanvas');
+	var ctx = canvas.getContext('2d');
+	ctx.fillStyle = '#A9A9A9';
+	ctx.fillRect(50,300,150,30);
+	
+	var canvas = document.getElementById('myCanvas');
+	var ctx = canvas.getContext('2d');
+	ctx.fillStyle = '#A9A9A9';
+	ctx.fillRect(50,360,150,30);
+	
+	var canvas = document.getElementById('myCanvas');
+	var ctx = canvas.getContext('2d');
+	ctx.fillStyle = '#A9A9A9';
+	ctx.fillRect(50,420,150,30);
+	
+	
+	var canvas = document.getElementById('myCanvas');
+	var ctx = canvas.getContext('2d');
+	ctx.fillStyle = '#A9A9A9';
+	ctx.fillRect(300,300,150,30);
+	
+	var canvas = document.getElementById('myCanvas');
+	var ctx = canvas.getContext('2d');
+	ctx.fillStyle = '#A9A9A9';
+	ctx.fillRect(300,360,150,30);
+	
+	var canvas = document.getElementById('myCanvas');
+	var ctx = canvas.getContext('2d');
+	ctx.fillStyle = '#A9A9A9';
+	ctx.fillRect(300,420,150,30);
+	
+	var canvas = document.getElementById('myCanvas');
+	var ctx = canvas.getContext('2d');
+	ctx.fillStyle = '#A9A9A9';
+	ctx.fillRect(550,300,150,30);
+	
+	var canvas = document.getElementById('myCanvas');
+	var ctx = canvas.getContext('2d');
+	ctx.fillStyle = '#A9A9A9';
+	ctx.fillRect(550,360,150,30);
+	
+	var canvas = document.getElementById('myCanvas');
+	var ctx = canvas.getContext('2d');
+	ctx.fillStyle = '#A9A9A9';
+	ctx.fillRect(550,420,150,30);
+	
+	var canvas = document.getElementById('myCanvas');
+	var ctx = canvas.getContext('2d');
+	ctx.fillStyle = '#A9A9A9';
+	ctx.fillRect(800,300,150,30);
+	
+	var canvas = document.getElementById('myCanvas');
+	var ctx = canvas.getContext('2d');
+	ctx.fillStyle = '#A9A9A9';
+	ctx.fillRect(800,360,150,30);
+	
+	var canvas = document.getElementById('myCanvas');
+	var ctx = canvas.getContext('2d');
+	ctx.fillStyle = '#A9A9A9';
+	ctx.fillRect(800,420,150,30);
+	
+	//The windows
+	//ome set
+	var canvas = document.getElementById('myCanvas');
+	var ctx = canvas.getContext('2d');
+	ctx.fillStyle = '#ADD8E6';
+	ctx.fillRect(980,380,7,50);
+	
+	var canvas = document.getElementById('myCanvas');
+	var ctx = canvas.getContext('2d');
+	ctx.fillStyle = '#ADD8E6';
+	ctx.fillRect(980,320,7,50);
+	
+	var canvas = document.getElementById('myCanvas');
+	var ctx = canvas.getContext('2d');
+	ctx.fillStyle = '#ADD8E6';
+	ctx.fillRect(980,260,7,50);
+	//another set
+	var canvas = document.getElementById('myCanvas');
+	var ctx = canvas.getContext('2d');
+	ctx.fillStyle = '#ADD8E6';
+	ctx.fillRect(980,180,7,50);
+	
+	var canvas = document.getElementById('myCanvas');
+	var ctx = canvas.getContext('2d');
+	ctx.fillStyle = '#ADD8E6';
+	ctx.fillRect(980,120,7,50);
+	
+	var canvas = document.getElementById('myCanvas');
+	var ctx = canvas.getContext('2d');
+	ctx.fillStyle = '#ADD8E6';
+	ctx.fillRect(980,60,7,50);
+	
+	
+	//the door
+	var canvas = document.getElementById('myCanvas');
+	var ctx = canvas.getContext('2d');
+	ctx.fillStyle = '#FFE4B5';
+	ctx.fillRect(0,150,10,40);
+	
+	
+	
+	//this is the part that determines the characters themselves
 	for (var i=0;i<rows.length;i++) {
 	    console.log("row:"+JSON.stringify(rows[i]));
 		
-		console.log("the thing is: "+rows[i].posX);
+		//console.log("the thing is: "+rows[i].posX);
+		//GETS THE MESSAGE
+		getMessage();
 		
 		var canvas = document.getElementById('myCanvas');
 		var ctx = canvas.getContext('2d');
 		ctx.fillStyle = '#000000';
 		ctx.fillRect(rows[i].posX,rows[i].posY,20,20);
 		
-		console.log("before printing: "+rows[i].lastMessage);
-		console.log("before printing: "+rows[i].displayed);
-		if (rows[i].displayed == 1) {
+		//console.log("before printing: "+rows[i].lastMessage);
+		
+		getMessage;
+		
+		//console.log("before printing: "+rows[i].displayed);
+		
+		//rows[i].displayed = 1;
+		
+		//if (rows[i].displayed == 1) {
 			var canvas = document.getElementById("myCanvas");
 			var ctx = canvas.getContext("2d");
 			ctx.font = "10px Arial";
 			ctx.fillText(rows[i].lastMessage,rows[i].posX,rows[i].posY-10);
-			console.log("after printing: "+rows[i].lastMessage);
+			//console.log("after printing: "+rows[i].lastMessage);
 			
-		}
+		//}
 		
 		/*
 	    result += "<tr><td class='Author'>"+rows[i].Author+"</td><td class='Title'>"+rows[i].Title+"</td><td class='Technique'>"+rows[i].Technique+"</td><td class='School'>"+rows[i].School+"</td><td class='School'>"+rows[i].URL+"</td>";
@@ -243,9 +364,9 @@ function buildTable(rows) {
 	
 	//result += "</table>";
 	
-	return 1; // was "result"
+	// was "result"return 1; 
     }
-}
+
 // Called when the user clicks on the Edit button on the results list from a search
 // This clears the search  results and shows the edit form, filling it in with the data from the associated record.
 // We get the "row" node for $(this) so we have the tight record to edit
@@ -309,15 +430,7 @@ function sendKeypress(userID, e){
 // This is called when the user clicks on a "Delete" button on a row matches from a search.
 // It puts up a modal asking the user to confirm if they really want to delete this record.  If they
 // hit "Delete record", the processDelete function is called to do the delete.
-function displayArt() {
-    selectid=$(this).attr('ID');
-    recIndex=$(this).attr('index');
-    $('#Message').text("Date: "+rows[recIndex].Date+" || Location: "+rows[recIndex].Location+" || Form: "+rows[recIndex].Form+" || Timeframe: "+rows[recIndex].Timeframe+" || Notes: "+rows[recIndex].notes);
-    console.log(rows[recIndex].URL);
-    $('#photo').attr('src', rows[recIndex].URL);
-    $('#displayArt').modal('show');
-    $('.completeDelete').click(processDelete);
-}
+
 
 // Calls the server with a recordID of a row to delete
 function processDelete(){
@@ -340,6 +453,14 @@ function getMatches(){
     $('.editdata').hide();
     userID = $('#search').val();
    
+  
+}
+
+function getMessage(){
+    $('.editdata').hide();
+    var userMessage = $('#myMessage').val();
+	console.log("this is the first test: "+userMessage+" cool    ");
+    sendMessage(userMessage)
   
 }
 
