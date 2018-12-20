@@ -229,7 +229,7 @@ var output;
 //set a user's displayed value to 0
 function setDisplayedToZero(userID){
 
-    query = "UPDATE clubKenyon SET displayed = '1' WHERE ID='"+userID+"'";
+    query = "UPDATE clubKenyon SET displayed = '0' WHERE ID='"+userID+"'";
     con.query(query, function (err, result, fields) {
 	if (err) throw err;
 	console.log("userID "+userID+" has had their last message set as not displayed");
